@@ -9,10 +9,13 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-bun.lockb
-bun.lock
 pnpm-lock.yaml
 package-lock.json
+bun.lock
+bun.lockb
+/bun.lock
+/bun.lockb
+/.bun.lock
 
 # testing
 /coverage
