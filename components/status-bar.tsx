@@ -37,7 +37,7 @@ export function StatusBar() {
           <Button
             variant="ghost"
             size="lg"
-            className="h-15 w-44 text-white text-base p-0 rounded-none border-r border-l border-b-2 border-[#3e3e42]"
+            className="h-15 w-56 text-white text-base p-0 rounded-none border-r border-l border-b-2 border-[#3e3e42]"
           >
             {" "}
             <span>@othavioquiliao</span>
