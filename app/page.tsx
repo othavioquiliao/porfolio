@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CodeEditor } from "@/components/code-editor";
-
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
