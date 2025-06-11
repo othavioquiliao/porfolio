@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CodeEditor } from "@/components/code-editor";
-import { StatusBar } from "@/components/status-bar";
+
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -13,14 +13,17 @@ export default function Home() {
     { id: "_sobre", name: "_sobre", type: "javascript" },
   ]);
 
-  const openFile = (fileName: string, fileType: string) => {
-    const existingTab = openTabs.find((tab) => tab.name === fileName);
-    if (!existingTab) {
-      const newTab = { id: fileName, name: fileName, type: fileType };
-      setOpenTabs([...openTabs, newTab]);
-    }
-    setActiveTab(fileName);
-  };
+  const openFile = useCallback(
+    (fileName: string, fileType: string) => {
+      const existingTab = openTabs.find((tab) => tab.name === fileName);
+      if (!existingTab) {
+        const newTab = { id: fileName, name: fileName, type: fileType };
+        setOpenTabs([...openTabs, newTab]);
+      }
+      setActiveTab(fileName);
+    },
+    [openTabs]
+  );
 
   const closeTab = (tabId: string) => {
     const newTabs = openTabs.filter((tab) => tab.id !== tabId);
@@ -54,7 +57,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("openFile", handleOpenFile as EventListener);
     };
-  }, [openTabs]); // Adicionar openTabs como dependência
+  }, [openFile]); // Corrigir dependência para openFile
 
   return (
     <div className="h-screen bg-background text-[#cccccc] font-mono text-sm flex flex-col">

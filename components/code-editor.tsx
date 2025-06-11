@@ -293,7 +293,7 @@ Entre em contato comigo através dos links na barra de status!
 }`,
 };
 
-export function CodeEditor({ fileName, fileType }: CodeEditorProps) {
+export function CodeEditor({ fileName }: CodeEditorProps) {
   const content =
     fileContents[fileName.toLowerCase()] ||
     `// Arquivo não encontrado: ${fileName}`;
@@ -339,7 +339,7 @@ export function CodeEditor({ fileName, fileType }: CodeEditorProps) {
       /(const|let|var|function|return|export|default|import|from|if|else|for|while|class|extends|async|await)/g;
 
     // Primeiro, destacamos keywords
-    let result = text.split(keywords).map((part, idx) => {
+    const result = text.split(keywords).map((part, idx) => {
       if (keywords.test(part)) {
         return (
           <span key={`keyword-${idx}`} className="text-zinc-300 font-semibold">
