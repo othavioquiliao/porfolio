@@ -1,4 +1,6 @@
 import { CodeBlock } from "./code-block";
+import { SideContent } from "./side-content";
+import React from "react";
 
 interface CodeEditorProps {
   fileName: string;
@@ -74,6 +76,154 @@ const projetoAtual = {
 };
 
 console.log("Confira meu trabalho! 💻");`,
+
+  // Conteúdo específico para cada projeto
+  "_projetos/ecommerce": `// Projeto: Plataforma E-commerce
+
+/**
+ * Detalhes do Projeto
+ * ==================
+ *
+ * Nome: Plataforma E-commerce
+ * Status: Produção
+ * GitHub: github.com/usuario/ecommerce
+ * Live: minhaloja.vercel.app
+ */
+
+// Tecnologias utilizadas
+const tech = {
+  frontend: ["Next.js", "TypeScript", "TailwindCSS", "Zustand"],
+  backend: ["Node.js", "Express", "TypeScript"],
+  database: ["PostgreSQL", "Prisma"],
+  payment: ["Stripe"],
+  deployment: ["Vercel", "Railway"]
+};
+
+// Funcionalidades principais
+const features = [
+  "Catálogo de produtos com filtragem avançada",
+  "Carrinho de compras persistente",
+  "Processamento de pagamentos com Stripe",
+  "Dashboard admin para gerenciamento de produtos",
+  "Sistema de autenticação com NextAuth.js",
+  "Analytics em tempo real",
+  "Design responsivo para todas as telas"
+];
+
+// Desafios e soluções
+const challenges = {
+  "Processamento de pagamentos": "Implementação de webhooks do Stripe para confirmar transações",
+  "Performance": "Otimização com ISR (Incremental Static Regeneration)",
+  "SEO": "Implementação de meta tags dinâmicas e sitemap",
+  "UX": "Testes de usabilidade com usuários reais"
+};
+
+// Aprendizados
+const learnings = [
+  "Integração de gateway de pagamento",
+  "Otimização de performance em Next.js",
+  "Modelagem de dados para e-commerce",
+  "Implementação de dashboards admin"
+];
+
+console.log("Projeto completo com foco em experiência do usuário e escalabilidade");`,
+
+  "_projetos/taskapp": `// Projeto: App de Gerenciamento de Tarefas
+
+/**
+ * Detalhes do Projeto
+ * ==================
+ *
+ * Nome: TaskFlow - Gerenciamento de Tarefas
+ * Status: Desenvolvimento (80% concluído)
+ * GitHub: github.com/usuario/taskapp
+ */
+
+// Tecnologias utilizadas
+const tech = {
+  frontend: ["React", "TypeScript", "Chakra UI", "React DnD"],
+  backend: ["Node.js", "Express", "Socket.io"],
+  database: ["MongoDB", "Mongoose"],
+  deployment: ["Netlify", "Render"]
+};
+
+// Funcionalidades principais
+const features = [
+  "Quadros Kanban com arrastar e soltar",
+  "Colaboração em tempo real com Socket.io",
+  "Sistema de comentários em tarefas",
+  "Notificações em tempo real",
+  "Atribuição de tarefas a membros",
+  "Filtros e busca avançada",
+  "Modo offline com sincronização"
+];
+
+// Desafios e soluções
+const challenges = {
+  "Sincronização em tempo real": "Implementação de Socket.io com salas por projeto",
+  "Conflitos de edição": "Sistema de bloqueio temporário durante edição",
+  "Performance": "Virtualização de listas para grandes volumes de tarefas",
+  "Offline mode": "IndexedDB para armazenamento local com sincronização"
+};
+
+// Próximos passos
+const nextSteps = [
+  "Implementar integração com calendário",
+  "Adicionar relatórios e analytics",
+  "Desenvolver aplicativo móvel com React Native",
+  "Implementar sistema de templates de projetos"
+];
+
+console.log("Projeto focado em produtividade e colaboração em equipe");`,
+
+  "_projetos/weather": `// Projeto: Dashboard do Clima
+
+/**
+ * Detalhes do Projeto
+ * ==================
+ *
+ * Nome: WeatherVue - Dashboard do Clima
+ * Status: Concluído
+ * GitHub: github.com/usuario/weather
+ * Live: weather-dash.netlify.app
+ */
+
+// Tecnologias utilizadas
+const tech = {
+  frontend: ["Vue.js", "Vuex", "TailwindCSS", "Chart.js"],
+  backend: ["Express", "Node.js"],
+  apis: ["OpenWeather API", "Mapbox API"],
+  deployment: ["Netlify", "Heroku"]
+};
+
+// Funcionalidades principais
+const features = [
+  "Previsão do tempo para 7 dias",
+  "Gráficos interativos de temperatura e precipitação",
+  "Geolocalização automática",
+  "Busca por cidade com autocompletar",
+  "Alertas de clima extremo",
+  "Mapa interativo com camadas de clima",
+  "Modo escuro/claro automático baseado no horário"
+];
+
+// Desafios e soluções
+const challenges = {
+  "Limitações de API": "Implementação de cache para reduzir chamadas",
+  "Visualização de dados": "Gráficos personalizados com Chart.js",
+  "UX em dispositivos móveis": "Design responsivo com abordagem mobile-first",
+  "Performance": "Lazy loading e code splitting"
+};
+
+// Métricas e resultados
+const metrics = {
+  usuarios: "5,000+ mensais",
+  satisfacao: "4.8/5 estrelas",
+  performance: "98/100 no Lighthouse",
+  retencao: "65% retornam semanalmente"
+};
+
+console.log("Projeto com foco em UX e visualização de dados meteorológicos");`,
 
   _habilidades: `// Minhas Habilidades e Competências 💪
 
@@ -152,15 +302,74 @@ const infoContato = {
     portfolio: "othavio.dev"
   },
 
-
   contato_preferido: "email", // ou "linkedin"
-
 };
 
 // Sinta-se à vontade para entrar em contato!
 console.log("Vamos construir algo incrível juntos! ✨");
 
 export default infoContato;`,
+};
+
+// Mapeamento de tecnologias por arquivo
+const fileTechnologies: Record<
+  string,
+  Array<{ name: string; icon: string; color: string }>
+> = {
+  _sobre: [
+    { name: "JavaScript", icon: "js", color: "#F7DF1E" },
+    { name: "React", icon: "react", color: "#61DAFB" },
+    { name: "Next.js", icon: "nextjs", color: "#000000" },
+  ],
+  _projetos: [
+    { name: "Next.js", icon: "nextjs", color: "#000000" },
+    { name: "TypeScript", icon: "ts", color: "#3178C6" },
+    { name: "Node.js", icon: "nodejs", color: "#339933" },
+    { name: "MongoDB", icon: "mongodb", color: "#47A248" },
+    { name: "PostgreSQL", icon: "postgres", color: "#336791" },
+    { name: "Vue.js", icon: "vue", color: "#4FC08D" },
+    { name: "Express", icon: "express", color: "#000000" },
+  ],
+  "_projetos/ecommerce": [
+    { name: "Next.js", icon: "nextjs", color: "#000000" },
+    { name: "TypeScript", icon: "ts", color: "#3178C6" },
+    { name: "TailwindCSS", icon: "tailwind", color: "#06B6D4" },
+    { name: "PostgreSQL", icon: "postgres", color: "#336791" },
+    { name: "Prisma", icon: "prisma", color: "#2D3748" },
+    { name: "Stripe", icon: "stripe", color: "#008CDD" },
+    { name: "Vercel", icon: "vercel", color: "#000000" },
+  ],
+  "_projetos/taskapp": [
+    { name: "React", icon: "react", color: "#61DAFB" },
+    { name: "TypeScript", icon: "ts", color: "#3178C6" },
+    { name: "Node.js", icon: "nodejs", color: "#339933" },
+    { name: "MongoDB", icon: "mongodb", color: "#47A248" },
+    { name: "Socket.io", icon: "socketio", color: "#010101" },
+    { name: "Express", icon: "express", color: "#000000" },
+  ],
+  "_projetos/weather": [
+    { name: "Vue.js", icon: "vue", color: "#4FC08D" },
+    { name: "Express", icon: "express", color: "#000000" },
+    { name: "TailwindCSS", icon: "tailwind", color: "#06B6D4" },
+    { name: "Chart.js", icon: "js", color: "#F7DF1E" },
+    { name: "Netlify", icon: "netlify", color: "#00C7B7" },
+  ],
+  _habilidades: [
+    { name: "JavaScript", icon: "js", color: "#F7DF1E" },
+    { name: "TypeScript", icon: "ts", color: "#3178C6" },
+    { name: "React", icon: "react", color: "#61DAFB" },
+    { name: "Node.js", icon: "nodejs", color: "#339933" },
+    { name: "Python", icon: "python", color: "#3776AB" },
+    { name: "Docker", icon: "docker", color: "#2496ED" },
+    { name: "AWS", icon: "aws", color: "#FF9900" },
+    { name: "Google Cloud", icon: "gcp", color: "#4285F4" },
+    { name: "Tailwind CSS", icon: "tailwind", color: "#06B6D4" },
+  ],
+  _contato: [
+    { name: "HTML", icon: "html", color: "#E34F26" },
+    { name: "CSS", icon: "css", color: "#1572B6" },
+    { name: "JavaScript", icon: "js", color: "#F7DF1E" },
+  ],
 };
 
 // Mapear extensões de arquivo para linguagens do SyntaxHighlighter
@@ -200,6 +409,7 @@ export function CodeEditor({ fileName, fileType }: CodeEditorProps) {
     fileContents[fileName.toLowerCase()] ||
     `// Arquivo não encontrado: ${fileName}`;
   const language = getLanguageFromFileType(fileType, fileName);
+  const technologies = fileTechnologies[fileName.toLowerCase()] || [];
 
   return (
     <div className="flex flex-1 w-full h-full gap-10">
@@ -207,7 +417,10 @@ export function CodeEditor({ fileName, fileType }: CodeEditorProps) {
         <CodeBlock language={language}>{content}</CodeBlock>
       </div>
       <div className="flex flex-1 w-1/2 bg-background overflow-hidden border-x border-gradient-to-r from-transparent to-background h-full">
-        Algum outro conteúdo
+        <SideContent
+          technologies={technologies}
+          title="Tecnologias utilizadas"
+        />
       </div>
     </div>
   );

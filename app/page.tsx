@@ -6,74 +6,85 @@ import { CodeEditor } from "@/components/code-editor";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+interface TabItem {
+  id: string;
+  name: string;
+  type: string;
+}
+
 export default function Home() {
+  // Estado para controlar as abas abertas e a aba ativa
   const [activeTab, setActiveTab] = useState("_sobre");
-  const [openTabs, setOpenTabs] = useState([
-    { id: "_sobre", name: "_sobre", type: "javascript" },
+  const [openTabs, setOpenTabs] = useState<TabItem[]>([
+    { id: "_sobre", name: "Sobre", type: "javascript" },
   ]);
 
+  // Função para abrir um arquivo em uma nova aba
   const openFile = useCallback(
-    (fileName: string, fileType: string) => {
-      const existingTab = openTabs.find((tab) => tab.name === fileName);
+    (fileName: string, fileType: string, label?: string) => {
+      const tabId = label || fileName;
+      const existingTab = openTabs.find((tab) => tab.id === tabId);
+
       if (!existingTab) {
-        const newTab = { id: fileName, name: fileName, type: fileType };
+        const newTab = { id: tabId, name: fileName, type: fileType };
         setOpenTabs([...openTabs, newTab]);
       }
-      setActiveTab(fileName);
+
+      setActiveTab(tabId);
     },
     [openTabs]
   );
 
-  const closeTab = (tabId: string) => {
-    const newTabs = openTabs.filter((tab) => tab.id !== tabId);
-    setOpenTabs(newTabs);
+  // Função para fechar uma aba
+  const closeTab = (tabId: string, event?: React.MouseEvent) => {
+    if (event) {
+      event.stopPropagation();
+    }
 
-    if (activeTab === tabId && newTabs.length > 0) {
-      setActiveTab(newTabs[newTabs.length - 1].id);
-    } else if (newTabs.length === 0) {
-      // Abrir tab padrão se não houver tabs
-      const defaultTab = {
-        id: "_sobre",
-        name: "_sobre",
-        type: "javascript",
-      };
+    const newTabs = openTabs.filter((tab) => tab.id !== tabId);
+
+    if (newTabs.length === 0) {
+      // Reabrir a aba padrão se todas as abas forem fechadas
+      const defaultTab = { id: "_sobre", name: "Sobre", type: "javascript" };
       setOpenTabs([defaultTab]);
       setActiveTab("_sobre");
+    } else if (activeTab === tabId) {
+      // Mudar para a última aba se a aba ativa for fechada
+      setActiveTab(newTabs[newTabs.length - 1].id);
     }
+
+    setOpenTabs(newTabs);
   };
 
   // Escutar eventos de abertura de arquivo do sidebar
   useEffect(() => {
     const handleOpenFile = (event: CustomEvent) => {
       const { fileName, fileType, label } = event.detail;
-      // Usar o label se disponível, senão usar fileName
-      const tabName = label || fileName;
-      openFile(tabName, fileType);
+      openFile(fileName, fileType, label);
     };
 
     window.addEventListener("openFile", handleOpenFile as EventListener);
-
     return () => {
       window.removeEventListener("openFile", handleOpenFile as EventListener);
     };
-  }, [openFile]); // Corrigir dependência para openFile
+  }, [openFile]);
 
   return (
-    <div className="h-screen bg-background text-[#cccccc] font-mono text-sm flex flex-col p-0">
-      <div className="flex h-full w-full flex-col overflow-hidden">
+    <div className="h-screen bg-background text-[#cccccc] font-mono text-sm flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {openTabs.length > 0 && (
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
-            className="flex-1 flex flex-col "
+            className="flex-1 flex flex-col"
           >
-            {/* Tab Bar Customizada */}
-            <div className="bg-background h-15  justify-between border-[#3e3e42] flex border-b border-t ">
-              <div className="flex  border-[#3e3e42] text-lg">
+            {/* Barra de abas */}
+            <div className="bg-background h-15 justify-between border-[#3e3e42] flex border-b border-t">
+              <div className="flex border-[#3e3e42] text-lg">
                 {openTabs.map((tab) => (
                   <div
                     key={tab.id}
-                    className={`group min-w-44 h-15 flex items-center justify-between px-4 border-r border-[#3e3e42] text-base  cursor-pointer ${
+                    className={`group min-w-44 h-15 flex items-center justify-between px-4 border-r border-[#3e3e42] text-base cursor-pointer ${
                       activeTab === tab.id
                         ? "border-b-3 border-b-[#007acc]"
                         : "border-b hover:bg-[#2a2d2e]"
@@ -83,10 +94,7 @@ export default function Home() {
                     <span className="truncate">{tab.name}</span>
                     {openTabs.length > 1 && (
                       <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          closeTab(tab.id);
-                        }}
+                        onClick={(e) => closeTab(tab.id, e)}
                         variant="ghost"
                         size="icon"
                         className="opacity-0 group-hover:opacity-100 hover:bg-[#3e3e42] size-5 ml-2"
@@ -100,15 +108,16 @@ export default function Home() {
 
               <Button
                 variant="ghost"
-                className=" border-l border-r border-[#3e3e42] rounded-none h-15 flex items-center justify-center text-md text-base  px-10"
+                className="border-l border-r border-[#3e3e42] rounded-none h-15 flex items-center justify-center text-md text-base px-4"
               >
                 _entrar-em-contato
               </Button>
             </div>
 
+            {/* Conteúdo das abas */}
             {openTabs.map((tab) => (
               <TabsContent key={tab.id} value={tab.id} className="flex-1 m-0">
-                <CodeEditor fileName={tab.name} fileType={tab.type} />
+                <CodeEditor fileName={tab.id} fileType={tab.type} />
               </TabsContent>
             ))}
           </Tabs>

@@ -3,9 +3,12 @@
 import {
   FileText,
   FolderOpen,
-  Package,
   FileCode,
-  BookOpen,
+  User,
+  Briefcase,
+  Mail,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 
 import {
@@ -24,122 +27,76 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { useState } from "react";
 
 interface FileItem {
   name: string;
   type: "file" | "folder";
+  icon?: React.ReactNode;
   extension?: string;
-  children?: FileItem[];
   label?: string;
+  children?: FileItem[];
 }
 
+// Estrutura simplificada do sidebar
 const fileStructure: FileItem[] = [
   {
-    name: "Bem-vindo",
-    type: "folder",
-    children: [
-      { name: "Sobre", type: "file", extension: "js", label: "_sobre" },
-      { name: "Contato", type: "file", extension: "js", label: "_contato" },
-    ],
+    name: "Sobre",
+    type: "file",
+    extension: "js",
+    label: "_sobre",
+    icon: <User className="w-4 h-4" />,
   },
   {
     name: "Projetos",
     type: "folder",
+    icon: <FolderOpen className="w-4 h-4 text-[#dcb67a]" />,
     children: [
       {
-        name: "Projeto 1",
+        name: "Plataforma E-commerce",
         type: "file",
         extension: "js",
-        label: "_projeto1",
+        label: "_projetos/ecommerce",
+        icon: <FileCode className="w-4 h-4 text-blue-500" />,
       },
       {
-        name: "Projeto 2",
+        name: "App de Tarefas",
         type: "file",
-        extension: "ts",
-        label: "_projeto2",
+        extension: "js",
+        label: "_projetos/taskapp",
+        icon: <FileCode className="w-4 h-4 text-blue-500" />,
       },
       {
-        name: "Projeto 3",
+        name: "Dashboard do Clima",
         type: "file",
-        extension: "ts",
-        label: "_projeto3",
+        extension: "js",
+        label: "_projetos/weather",
+        icon: <FileCode className="w-4 h-4 text-blue-500" />,
+      },
+      {
+        name: "Lista de Projetos",
+        type: "file",
+        extension: "js",
+        label: "_projetos",
+        icon: <FileText className="w-4 h-4 text-yellow-500" />,
       },
     ],
   },
+  {
+    name: "Habilidades",
+    type: "file",
+    extension: "js",
+    label: "_habilidades",
+    icon: <Briefcase className="w-4 h-4" />,
+  },
+  {
+    name: "Contato",
+    type: "file",
+    extension: "js",
+    label: "_contato",
+    icon: <Mail className="w-4 h-4" />,
+  },
 ];
-
-const getFileIcon = (extension?: string) => {
-  switch (extension) {
-    case "js":
-      return <FileCode className="w-4 h-4 text-yellow-500" />;
-    case "ts":
-      return <FileCode className="w-4 h-4 text-blue-500" />;
-    case "json":
-      return <Package className="w-4 h-4 text-orange-500" />;
-    case "md":
-      return <BookOpen className="w-4 h-4 text-blue-400" />;
-    default:
-      return <FileText className="w-4 h-4 text-gray-400" />;
-  }
-};
-
-function FileTreeItem({
-  item,
-  depth = 0,
-  onFileClick,
-}: {
-  item: FileItem;
-  depth?: number;
-  onFileClick: (fileName: string, fileType: string, label?: string) => void;
-}) {
-  const handleFileClick = () => {
-    if (item.type === "file") {
-      onFileClick(item.name, item.extension || "txt", item.label);
-    }
-  };
-
-  if (item.type === "file") {
-    return (
-      <SidebarMenuItem>
-        <SidebarMenuButton
-          onClick={handleFileClick}
-          className="h-7 hover:bg-[#2a2d2e] text-[#cccccc]"
-          style={{ paddingLeft: `${depth * 12 + 8}px` }}
-        >
-          {getFileIcon(item.extension)}
-          <span className="text-sm">{item.name}</span>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-    );
-  }
-
-  return (
-    <Collapsible defaultOpen={depth === 0}>
-      <SidebarMenuItem>
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton
-            className="h-7 hover:bg-[#2a2d2e] text-[#cccccc]"
-            style={{ paddingLeft: `${depth * 12 + 8}px` }}
-          >
-            <FolderOpen className="w-4 h-4 text-[#dcb67a]" />
-            <span className="text-sm">{item.name}</span>
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
-      </SidebarMenuItem>
-
-      <CollapsibleContent>
-        {item.children?.map((child, index) => (
-          <FileTreeItem
-            key={`${child.name}-${index}`}
-            item={child}
-            depth={depth + 1}
-            onFileClick={onFileClick}
-          />
-        ))}
-      </CollapsibleContent>
-    </Collapsible>
-  );
-}
 
 export function AppSidebar() {
   const handleFileClick = (
@@ -162,7 +119,7 @@ export function AppSidebar() {
       variant="sidebar"
       className="border-l border-[#3e3e42] bg-background"
     >
-      <SidebarHeader className="border-b bg-background border-[#3e3e42] text-md border-t  font-semibold h-15 flex  justify-center items-center  ">
+      <SidebarHeader className="border-b bg-background border-[#3e3e42] text-md border-t font-semibold h-15 flex justify-center items-center">
         _othavio_quiliao
       </SidebarHeader>
 
@@ -171,16 +128,78 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="pl-2 pt-2">
               {fileStructure.map((item, index) => (
-                <FileTreeItem
-                  key={`${item.name}-${index}`}
-                  item={item}
-                  onFileClick={handleFileClick}
-                />
+                <SidebarMenuItem key={`${item.name}-${index}`}>
+                  {item.type === "file" ? (
+                    <SidebarMenuButton
+                      onClick={() =>
+                        handleFileClick(
+                          item.name,
+                          item.extension || "js",
+                          item.label
+                        )
+                      }
+                      className="h-7 hover:bg-[#2a2d2e] text-[#cccccc]"
+                    >
+                      {item.icon}
+                      <span className="text-sm">{item.name}</span>
+                    </SidebarMenuButton>
+                  ) : (
+                    <FolderItem item={item} handleFileClick={handleFileClick} />
+                  )}
+                </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
+  );
+}
+
+function FolderItem({
+  item,
+  handleFileClick,
+}: {
+  item: FileItem;
+  handleFileClick: (fileName: string, fileType: string, label?: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger asChild>
+        <SidebarMenuButton className="h-7 hover:bg-[#2a2d2e] text-[#cccccc] w-full">
+          {isOpen ? (
+            <ChevronDown className="w-4 h-4 mr-1" />
+          ) : (
+            <ChevronRight className="w-4 h-4 mr-1" />
+          )}
+          {item.icon}
+          <span className="text-sm">{item.name}</span>
+        </SidebarMenuButton>
+      </CollapsibleTrigger>
+
+      <CollapsibleContent>
+        <div className="pl-4">
+          {item.children?.map((child, idx) => (
+            <SidebarMenuItem key={`${child.name}-${idx}`}>
+              <SidebarMenuButton
+                onClick={() =>
+                  handleFileClick(
+                    child.name,
+                    child.extension || "js",
+                    child.label
+                  )
+                }
+                className="h-7 hover:bg-[#2a2d2e] text-[#cccccc]"
+              >
+                {child.icon}
+                <span className="text-sm">{child.name}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

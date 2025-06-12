@@ -1,37 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { StatusBar } from "@/components/status-bar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
+// Fonte monospace para o tema VSCode
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Othavio Quilião",
-  description: "Meu portfólio de desenvolvimento web",
+  title: "Othavio Quilião | Portfólio",
+  description: "Portfólio de desenvolvimento web com tema VSCode",
 };
 
-export default async function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={`${geistMono.variable} font-mono antialiased dark`}
         suppressHydrationWarning
       >
-        <SidebarProvider defaultOpen={true} className="flex flex-col">
+        <SidebarProvider defaultOpen={true}>
           <div className="flex h-screen w-full bg-background">
             <AppSidebar />
             <main className="flex-1 flex flex-col">{children}</main>
