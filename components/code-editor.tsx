@@ -1,3 +1,5 @@
+import { CodeBlock } from "./code-block";
+
 interface CodeEditorProps {
   fileName: string;
   fileType: string;
@@ -10,27 +12,10 @@ const fileContents: Record<string, string> = {
 const developer = {
   name: "Othavio Quilião",
   role: "Full Stack Developer",
-  location: "Brasil",
+  location: "Brasil - Curitiba",
   status: "Disponível para oportunidades",
-
-  greeting() {
-    return \`Olá! Eu sou \${this.name},
-           um \${this.role} apaixonado
-           localizado em \${this.location}.\`;
-  }
 };
-
-console.log(developer.greeting());
-
-// Vamos explorar meu trabalho juntos!
-const navigation = [
-  "📋 Sobre.js        // Saiba mais sobre mim",
-  "🚀 Projetos.js     // Confira meus projetos",
-  "💼 Habilidades.js  // Minhas competências",
-  "📞 Contato.js      // Entre em contato"
-];
-
-navigation.forEach(item => console.log(item));`,
+`,
 
   _projetos: `// Meus Projetos em Destaque 🚀
 
@@ -167,237 +152,62 @@ const infoContato = {
     portfolio: "othavio.dev"
   },
 
-  disponibilidade: {
-    status: "🟢 Disponível para novas oportunidades",
-    horario_trabalho: "Seg-Sex, 9h-18h BRT",
-    tempo_resposta: "Geralmente em até 24 horas",
-
-    interessado_em: [
-      "Posições full-time",
-      "Projetos freelance",
-      "Consultoria técnica",
-      "Colaboração em código aberto"
-    ]
-  },
 
   contato_preferido: "email", // ou "linkedin"
 
-  // Função de contato rápido
-  enviarMensagem: function(mensagem) {
-    return \`
-      📧 Email: \${this.email}
-      💬 Mensagem: \${mensagem}
-
-      Retornarei em breve!
-      Obrigado por entrar em contato! 🚀
-    \`;
-  }
 };
 
 // Sinta-se à vontade para entrar em contato!
 console.log("Vamos construir algo incrível juntos! ✨");
 
 export default infoContato;`,
-
-  _readme: `# 💼 Meu Portfólio
-
-Bem-vindo ao meu portfólio desenvolvido com tema VSCode!
-
-## 🚀 Tecnologias Utilizadas
-
-- **Frontend**: Next.js, React, TypeScript
-- **Styling**: Tailwind CSS, Shadcn UI
-- **Icons**: Lucide React
-
-## 📁 Estrutura do Projeto
-
-\`\`\`
-portfolio/
-├── 📄 Sobre.js        # Página de apresentação
-├── 👤 Projetos.js     # Projetos em destaque
-├── 🚀 Habilidades.js  # Competências técnicas
-├── 📞 Contato.js      # Informações de contato
-└── 📖 README.md       # Este arquivo
-\`\`\`
-
-## 🎨 Features
-
-- ✅ Interface similar ao VSCode
-- ✅ Syntax highlighting
-- ✅ Tabs funcionais
-- ✅ Explorer de arquivos
-- ✅ Barra de status
-- ✅ Tema escuro
-
-## 📫 Contato
-
-Entre em contato comigo através dos links na barra de status!
-
----
-
-*Construído com ❤️ usando Next.js*`,
-
-  _package: `{
-  "name": "othavio-portfolio",
-  "version": "1.0.0",
-  "description": "Portfólio pessoal desenvolvido com tema VSCode",
-  "author": "Othavio Quilião",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "next": "^14.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "typescript": "^5.0.0",
-    "@radix-ui/react-collapsible": "^1.0.0",
-    "@radix-ui/react-slot": "^1.0.0",
-    "@radix-ui/react-tabs": "^1.0.0",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
-    "lucide-react": "^0.294.0",
-    "tailwind-merge": "^2.0.0",
-    "tailwindcss-animate": "^1.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "autoprefixer": "^10.0.0",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^14.0.0",
-    "postcss": "^8.0.0",
-    "tailwindcss": "^3.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/othavio-quiliao/portfolio"
-  },
-  "keywords": [
-    "portfolio",
-    "nextjs",
-    "react",
-    "typescript",
-    "vscode-theme",
-    "developer"
-  ],
-  "license": "MIT"
-}`,
 };
 
-export function CodeEditor({ fileName }: CodeEditorProps) {
+// Mapear extensões de arquivo para linguagens do SyntaxHighlighter
+const getLanguageFromFileType = (
+  fileType: string,
+  fileName: string
+): string => {
+  if (fileName.toLowerCase().includes("readme")) return "markdown";
+  if (fileName.toLowerCase().includes("package")) return "json";
+
+  switch (fileType.toLowerCase()) {
+    case "javascript":
+    case "js":
+      return "javascript";
+    case "typescript":
+    case "ts":
+      return "typescript";
+    case "json":
+      return "json";
+    case "markdown":
+    case "md":
+      return "markdown";
+    case "html":
+      return "html";
+    case "css":
+      return "css";
+    case "python":
+    case "py":
+      return "python";
+    default:
+      return "javascript"; // fallback
+  }
+};
+
+export function CodeEditor({ fileName, fileType }: CodeEditorProps) {
   const content =
     fileContents[fileName.toLowerCase()] ||
     `// Arquivo não encontrado: ${fileName}`;
-  const lines = content.split("\n");
-
-  const highlightSyntax = (line: string) => {
-    // Comentários
-    if (line.trim().startsWith("//")) {
-      return <span className="text-gray-400">{line}</span>;
-    }
-
-    // Comentários de bloco
-    if (
-      line.includes("/**") ||
-      line.includes("*/") ||
-      line.trim().startsWith("*")
-    ) {
-      return <span className="text-[#6A9955]">{line}</span>;
-    }
-
-    // Strings
-    if (line.includes('"') || line.includes("'") || line.includes("`")) {
-      return (
-        <span>
-          {line.split(/("[^"]*"|'[^']*'|`[^`]*`)/).map((part, idx) =>
-            idx % 2 === 1 ? (
-              <span key={idx} className="text-emerald-400 font-semibold">
-                {part}
-              </span>
-            ) : (
-              <span key={idx}>{highlightKeywordsAndVariables(part)}</span>
-            )
-          )}
-        </span>
-      );
-    }
-
-    return <span>{highlightKeywordsAndVariables(line)}</span>;
-  };
-
-  const highlightKeywordsAndVariables = (text: string) => {
-    const keywords =
-      /(const|let|var|function|return|export|default|import|from|if|else|for|while|class|extends|async|await)/g;
-
-    // Primeiro, destacamos keywords
-    const result = text.split(keywords).map((part, idx) => {
-      if (keywords.test(part)) {
-        return (
-          <span key={`keyword-${idx}`} className="text-zinc-300 font-semibold">
-            {part}
-          </span>
-        );
-      }
-
-      // Para partes que não são keywords, destacamos variáveis
-      const variableRegex = /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\b/g;
-      const variableParts = part.split(variableRegex);
-
-      return variableParts.map((variablePart, varIdx) => {
-        // Verifica se é um identificador válido e não é uma keyword
-        if (
-          variableRegex.test(variablePart) &&
-          !/(const|let|var|function|return|export|default|import|from|if|else|for|while|class|extends|async|await|console|log|forEach|split|map|includes|trim|startsWith|test)/.test(
-            variablePart
-          )
-        ) {
-          return (
-            <span key={`var-${idx}-${varIdx}`} className="text-violet-500 ">
-              {variablePart}
-            </span>
-          );
-        }
-        return variablePart;
-      });
-    });
-
-    return result;
-  };
+  const language = getLanguageFromFileType(fileType, fileName);
 
   return (
-    <div className="flex flex-1 bg-background overflow-hidden border-r border-[#3e3e42] h-full">
-      {/* Números das linhas */}
-      <div className="w-10 bg-background border-r  border-[#3e3e42] py-2 px-3 overflow-y-auto flex-shrink-0">
-        {lines.map((_, i) => (
-          <div
-            key={i + 1}
-            className="text-[#858585] text-right text-sm leading-6 select-none"
-          >
-            {i + 1}
-          </div>
-        ))}
+    <div className="flex flex-1 w-full h-full gap-10">
+      <div className="flex flex-1 w-1/2 bg-background overflow-hidden border-r border-gradient-to-r from-transparent to-background h-full">
+        <CodeBlock language={language}>{content}</CodeBlock>
       </div>
-
-      {/* Conteúdo do código */}
-      <div className="flex-1 px-4 py-2 overflow-y-auto">
-        <pre className="text-[#cccccc] leading-6 font-mono text-sm">
-          <code>
-            {lines.map((line, i) => (
-              <div key={i} className="min-h-[24px]">
-                {highlightSyntax(line) || " "}
-              </div>
-            ))}
-          </code>
-        </pre>
+      <div className="flex flex-1 w-1/2 bg-background overflow-hidden border-x border-gradient-to-r from-transparent to-background h-full">
+        Algum outro conteúdo
       </div>
     </div>
   );

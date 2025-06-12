@@ -43,26 +43,29 @@ const fileStructure: FileItem[] = [
     ],
   },
   {
-    name: "Habilidades",
+    name: "Projetos",
     type: "folder",
     children: [
       {
-        name: "Tecnologias",
+        name: "Projeto 1",
         type: "file",
         extension: "js",
-        label: "_habilidades",
+        label: "_projeto1",
       },
-      { name: "Projetos", type: "file", extension: "ts", label: "_projetos" },
+      {
+        name: "Projeto 2",
+        type: "file",
+        extension: "ts",
+        label: "_projeto2",
+      },
+      {
+        name: "Projeto 3",
+        type: "file",
+        extension: "ts",
+        label: "_projeto3",
+      },
     ],
   },
-  {
-    name: "Documentação",
-    type: "folder",
-    children: [
-      { name: "README", type: "file", extension: "md", label: "_readme" },
-    ],
-  },
-  { name: "package", type: "file", extension: "json", label: "_package" },
 ];
 
 const getFileIcon = (extension?: string) => {
@@ -166,7 +169,7 @@ export function AppSidebar() {
       <SidebarContent className="bg-background">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="pl-2 pt-">
+            <SidebarMenu className="pl-2 pt-2">
               {fileStructure.map((item, index) => (
                 <FileTreeItem
                   key={`${item.name}-${index}`}

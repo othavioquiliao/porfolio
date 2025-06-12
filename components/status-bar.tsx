@@ -24,7 +24,7 @@ export function StatusBar() {
           <a href="https://www.linkedin.com/in/othavioquiliao/" target="_blank">
             <Button
               variant="ghost"
-              size="sm"
+              size="lg"
               className="h-15 w-15  text-white p-0 rounded-none border-r border-b border-[#3e3e42]"
             >
               <Linkedin className="size-5" />
@@ -39,8 +39,7 @@ export function StatusBar() {
             size="lg"
             className="h-15 w-56 text-white text-base p-0 rounded-none border-r border-l border-b-2 border-[#3e3e42]"
           >
-            {" "}
-            <span>@othavioquiliao</span>
+            <span className="text-base"> @othavioquiliao</span>
             <GithubIcon className="size-5" />
           </Button>
         </a>

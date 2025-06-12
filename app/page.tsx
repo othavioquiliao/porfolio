@@ -59,8 +59,8 @@ export default function Home() {
   }, [openFile]); // Corrigir dependência para openFile
 
   return (
-    <div className="h-screen bg-background text-[#cccccc] font-mono text-sm flex flex-col">
-      <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="h-screen bg-background text-[#cccccc] font-mono text-sm flex flex-col p-0">
+      <div className="flex h-full w-full flex-col overflow-hidden">
         {openTabs.length > 0 && (
           <Tabs
             value={activeTab}
@@ -69,7 +69,7 @@ export default function Home() {
           >
             {/* Tab Bar Customizada */}
             <div className="bg-background h-15  justify-between border-[#3e3e42] flex border-b border-t ">
-              <div className="flex border-r border-[#3e3e42] text-lg ">
+              <div className="flex  border-[#3e3e42] text-lg">
                 {openTabs.map((tab) => (
                   <div
                     key={tab.id}
@@ -100,7 +100,7 @@ export default function Home() {
 
               <Button
                 variant="ghost"
-                className="bg-background border border-[#3e3e42] rounded-none h-15 flex items-center justify-center text-md text-base px-10"
+                className=" border-l border-r border-[#3e3e42] rounded-none h-15 flex items-center justify-center text-md text-base  px-10"
               >
                 _entrar-em-contato
               </Button>
