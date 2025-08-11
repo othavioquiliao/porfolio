@@ -199,7 +199,7 @@ export default function Home() {
 
             <div className="pl-6 space-y-2">
               <h1 className="text-4xl md:text-6xl font-bold">
-                <DecryptionText text="Othavio Quilião " delay={500} />
+                <DecryptionText text="Teste Teste " delay={500} />
               </h1>
               <p className="text-xl text-gray-300 font-mono">
                 <DecryptionText text="Full Stack Developer " delay={1000} />
@@ -232,8 +232,8 @@ export default function Home() {
           </div>
 
           <div className="font-mono text-sm text-gray-400 space-y-1">
-            <TerminalLine prompt=">">{`console.log("Welcome to my digital space!")`}</TerminalLine>
-            <TerminalLine prompt=">">{`// Building the future, one line of code at a time`}</TerminalLine>
+            <TerminalLine prompt=">">{`console.log("Bem vindo ao meu portifolio!")`}</TerminalLine>
+            <TerminalLine prompt=">">{`// Tentando me tornar um desenvolvedor melhor, uma linha de código por vez`}</TerminalLine>
           </div>
         </section>
 
@@ -263,7 +263,7 @@ export default function Home() {
         {/* Projects Section */}
         <section className="mb-16">
           <div className="mb-6">
-            <TerminalLine>cat projects.json</TerminalLine>
+            <TerminalLine>cat projetos.json</TerminalLine>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
