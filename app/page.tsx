@@ -84,7 +84,7 @@ export default function Home() {
                 {openTabs.map((tab) => (
                   <div
                     key={tab.id}
-                    className={`group min-w-44 h-15 flex items-center justify-between px-4 border-r border-[#3e3e42] text-base cursor-pointer ${
+                    className={`group min-w-40 max-w-50 h-15 flex items-center justify-between px-4 border-r border-[#3e3e42] text-base cursor-pointer ${
                       activeTab === tab.id
                         ? "border-b-3 border-b-[#007acc]"
                         : "border-b hover:bg-[#2a2d2e]"
