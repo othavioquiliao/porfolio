@@ -20,6 +20,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 
 import {
@@ -47,6 +50,7 @@ const fileStructure: FileItem[] = [
     label: "_sobre",
     icon: <User className="w-4 h-4" />,
   },
+
   {
     name: "Projetos",
     type: "folder",
@@ -127,9 +131,9 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="pl-2 pt-2">
-              {fileStructure.map((item, index) => (
-                <SidebarMenuItem key={`${item.name}-${index}`}>
-                  {item.type === "file" ? (
+              {fileStructure.map((item, index) =>
+                item.type === "file" ? (
+                  <SidebarMenuItem key={`${item.name}-${index}`}>
                     <SidebarMenuButton
                       onClick={() =>
                         handleFileClick(
@@ -143,11 +147,15 @@ export function AppSidebar() {
                       {item.icon}
                       <span className="text-sm">{item.name}</span>
                     </SidebarMenuButton>
-                  ) : (
-                    <FolderItem item={item} handleFileClick={handleFileClick} />
-                  )}
-                </SidebarMenuItem>
-              ))}
+                  </SidebarMenuItem>
+                ) : (
+                  <FolderItem
+                    key={`${item.name}-${index}`}
+                    item={item}
+                    handleFileClick={handleFileClick}
+                  />
+                )
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -166,40 +174,42 @@ function FolderItem({
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <CollapsibleTrigger asChild>
-        <SidebarMenuButton className="h-7 hover:bg-[#2a2d2e] text-[#cccccc] w-full">
-          {isOpen ? (
-            <ChevronDown className="w-4 h-4 mr-1" />
-          ) : (
-            <ChevronRight className="w-4 h-4 mr-1" />
-          )}
-          {item.icon}
-          <span className="text-sm">{item.name}</span>
-        </SidebarMenuButton>
-      </CollapsibleTrigger>
+    <SidebarMenuItem>
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton className="h-7 hover:bg-[#2a2d2e] text-[#cccccc] w-full">
+            {isOpen ? (
+              <ChevronDown className="w-4 h-4 mr-1" />
+            ) : (
+              <ChevronRight className="w-4 h-4 mr-1" />
+            )}
+            {item.icon}
+            <span className="text-sm">{item.name}</span>
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
 
-      <CollapsibleContent>
-        <div className="pl-4">
-          {item.children?.map((child, idx) => (
-            <SidebarMenuItem key={`${child.name}-${idx}`}>
-              <SidebarMenuButton
-                onClick={() =>
-                  handleFileClick(
-                    child.name,
-                    child.extension || "js",
-                    child.label
-                  )
-                }
-                className="h-7 hover:bg-[#2a2d2e] text-[#cccccc]"
-              >
-                {child.icon}
-                <span className="text-sm">{child.name}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {item.children?.map((child, idx) => (
+              <SidebarMenuSubItem key={`${child.name}-${idx}`}>
+                <SidebarMenuSubButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleFileClick(
+                      child.name,
+                      child.extension || "js",
+                      child.label
+                    );
+                  }}
+                >
+                  {child.icon}
+                  <span className="text-sm">{child.name}</span>
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </Collapsible>
+    </SidebarMenuItem>
   );
 }
